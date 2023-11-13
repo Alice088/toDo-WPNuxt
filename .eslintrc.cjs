@@ -31,26 +31,18 @@ module.exports = {
 		"vue"
 	],
 	"rules": {
-		"indent": [
-			"error",
-			"tab"
-		],
-		"linebreak-style": [
-			"error",
-			"windows"
-		],
-		"quotes": [
-			"error",
-			"double"
-		],
-		"semi": [
-			"error",
-			"always"
-		],
-		"no-undef": [
-			"off"
-		],
-		"vue/multi-word-component-names":
-			["off", { "ignores": [] }]
+		"indent": [ "error", "tab" ],
+
+		"linebreak-style": [ "error", "windows"],
+
+		"quotes": [ "error", "double" ],
+
+		"semi": [ "error", "always" ],
+
+		"no-undef": [ "off" ],
+
+		"vue/multi-word-component-names": [ "off" ],
+
+		"no-mixed-spaces-and-tabs": [ "off" ],
 	}
 };

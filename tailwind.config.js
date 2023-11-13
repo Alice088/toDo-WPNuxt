@@ -20,24 +20,12 @@ export default {
 			},
 
 			colors: {
-				//light
-				"strongBlue": "#5680e9",
-				"middleBlue": "#5AB9EA",
-				"weakBlue": "#84CEEB",
-				"whitePurple": "#C1C8E4",
-				"megaPurple": "#8860D0",
-
-				//dark
-				"strongBlack": "#0B0C10",
-				"middleBlack": "#1F2833",
-				"whiteBlack": "#C5C6C7",
-				"strongOceanBlue": "#66FCF1",
-				"weakOceanBlue": "#45A29E",
+				"BabyPink": "#F0C9C4",
+				"LightRed": "#F7D1D0",
+				"PalePink": "#FFDAD8",
+				"GraniteGray": "#616161",
+				"BlackOlive": "#3B3738"
 			},
-
-			fontFamily: {
-				"avenir": ["avenir", "sans-serif"],
-			}
 		},
 	},
 

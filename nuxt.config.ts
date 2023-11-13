@@ -2,6 +2,12 @@
 export default defineNuxtConfig({
 	devtools: { enabled: true },
 
+	runtimeConfig: {
+		public: {
+			WPUrl: "http://to-do-wpnuxt/"
+		}
+	},
+
 	app: {
 		head: {
 			title: "Gosha To Do",

@@ -1,7 +1,7 @@
 <template>
-  <div class="font-avenir">
-    <NuxtPage/>
-  </div>
+	<nuxtLayout>
+    <NuxtPage />
+	</nuxtLayout>
 </template>
 
 <script setup>

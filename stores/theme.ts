@@ -1,19 +1,19 @@
 export const useThemeStore = defineStore("theme", {
 	state: () => {
 		return {
-			theme: "dark"
+			theme: "Dark"
 		};
 	},
 
 	actions: {
 		setDarkTheme() {
 			document.documentElement.classList.add("dark");
-			this.theme = "dark";
+			this.theme = "Dark";
 		},
 
 		setLightTheme() {
 			document.documentElement.classList.remove("dark");
-			this.theme = "light";
+			this.theme = "Light";
 		},
 
 		detectAndSetTheme() {
