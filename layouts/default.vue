@@ -1,46 +1,52 @@
 <script setup lang="ts">
 const theme = useThemeStore();
 const header = ref<HTMLHeadElement | null>(null);
-const headerMainText = ref<HTMLElement | null>(null);
-let isVisibleHeader = false;
+const headerText = ref<HTMLElement | null>(null);
+const isVisibleHeader = ref(false);
+let resetTime: NodeJS.Timeout | null = null;
 
-function showOrHideHeader() {
-	if(isVisibleHeader) {
-		(header.value as HTMLHeadElement).style.transform = "translateY(0)";
-		isVisibleHeader = false;
-	} else {
-		(header.value as HTMLHeadElement).style.transform = "translateY(-100%)";
-		isVisibleHeader = true;
+const showHeader = () => {
+	if(header.value) header.value.style.transform = "translateY(0)";
+	isVisibleHeader.value = true;
+	resetTime = setTimeout(hideHeader, 10000);
+};
+
+const hideHeader = () => {
+	if(header.value) header.value.style.transform = "translateY(-100%)";
+	if(resetTime) clearTimeout(resetTime);
+	isVisibleHeader.value = false;
+};
+
+const changeSizeOfHeaderText = () => {
+	if(headerText.value) {
+		headerText.value.textContent = window.innerWidth <= 410 ? "TODO" : "TO-DO-WPNUXT";
 	}
-}
+};
 
 onMounted(() => {
-	window.addEventListener("resize", () => {
-		let text = headerMainText.value;
-		text ? text.innerHTML = window.innerWidth <= 410 ? "TODO" : "TO-DO-WPNUXT" : null;
-	});
+	window.addEventListener("resize", changeSizeOfHeaderText);
 });
 </script>
 
 <template>
 	<div>
-		<header ref="header"
-			class="
-			fixed
-			w-full
-			flex
-			text-BabyPink
-			dark:text-BlackOlive
-			justify-between
-			text-[20px]
-			p-3
-			bg-BlackOlive
-			dark:bg-BabyPink
-			transition
-			duration-300
-			translate-y-[-100%]"
+		<header
+			ref="header"
+			class="fixed
+				w-full
+				flex
+				text-BabyPink
+				dark:text-BlackOlive
+				justify-between
+				text-[20px]
+				p-3
+				bg-BlackOlive
+				dark:bg-BabyPink
+				transition
+				duration-300
+				translate-y-[-100%]"
 		>
-			<strong class="text-[40px]" ref="headerMainText">
+			<strong class="text-[40px]" ref="headerText">
 				TO-DO-WPNUXT
 			</strong>
 
@@ -48,20 +54,20 @@ onMounted(() => {
 				{{ theme.theme }}
 			</theButton>
 
-			<theButton @click="showOrHideHeader"
-				class="
-				absolute
-				top-[84px]
-				right-[12px]
-				bg-BlackOlive
-				dark:bg-BabyPink
-				p-1
-				rounded-b-[20px]"
+			<theButton
+				@click="isVisibleHeader ? hideHeader() : showHeader()"
+				class="absolute
+					top-[84px]
+					right-[12px]
+					bg-BabyPink
+					dark:bg-BlackOlive
+					p-1
+					rounded-b-[5px]"
 			>
 				<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 					<g clip-path="url(#clip0_105_1724)">
 						<path
-							d="M3 6.00098H21M3 12.001H21M3 18.001H21" :stroke="theme.theme === 'Light' ? `#F0C9C4` : `#3B3738`"
+							d="M3 6.00098H21M3 12.001H21M3 18.001H21" :stroke="theme.theme === 'Dark' ? `#F0C9C4` : `#3B3738`"
 							stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 						/>
 					</g>
