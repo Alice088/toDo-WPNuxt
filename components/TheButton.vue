@@ -1,5 +1,5 @@
 <template>
-  <button class="active:scale-90 desktop:transition cursor-pointer">
+  <button class="active:scale-90 transition cursor-pointer select-none">
     <slot />
   </button>
 </template>

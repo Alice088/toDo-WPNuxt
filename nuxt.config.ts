@@ -2,14 +2,10 @@
 export default defineNuxtConfig({
 	devtools: { enabled: false },
 
+	ssr: false,
+
 	build: {
 		analyze: {}
-	},
-
-	runtimeConfig: {
-		public: {
-			WPUrl: "http://to-do-wpnuxt/"
-		}
 	},
 
 	app: {
@@ -17,7 +13,7 @@ export default defineNuxtConfig({
 			htmlAttrs: { lang: "en-US" },
 			title: "Gosha To Do",
 			link: [
-				{ rel: "icon", type: "image/x-icon", href: "/favicon-100.png" }
+				{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }
 			]
 		}
 	},

@@ -62,6 +62,7 @@ onMounted(() => {
 					bg-BabyPink
 					dark:bg-BlackOlive
 					p-1
+					z-1
 					rounded-b-[5px]"
 			>
 				<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
