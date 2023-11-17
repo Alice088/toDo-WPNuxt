@@ -59,8 +59,8 @@ onMounted(() => {
 				class="absolute
 					top-[84px]
 					right-[12px]
-					bg-BabyPink
-					dark:bg-BlackOlive
+					bg-BlackOlive
+					dark:bg-BabyPink
 					p-1
 					z-1
 					rounded-b-[5px]"
@@ -68,7 +68,7 @@ onMounted(() => {
 				<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 					<g clip-path="url(#clip0_105_1724)">
 						<path
-							d="M3 6.00098H21M3 12.001H21M3 18.001H21" :stroke="theme.theme === 'Dark' ? `#F0C9C4` : `#3B3738`"
+							d="M3 6.00098H21M3 12.001H21M3 18.001H21" :stroke="theme.theme === 'Light' ? `#F0C9C4` : `#3B3738`"
 							stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 						/>
 					</g>

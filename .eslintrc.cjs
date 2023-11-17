@@ -35,7 +35,7 @@ module.exports = {
 
 		"linebreak-style": [ "error", "windows"],
 
-		"quotes": [ "error", "double" ],
+		"quotes": [ "warn", "double" ],
 
 		"semi": [ "error", "always" ],
 
@@ -44,5 +44,7 @@ module.exports = {
 		"vue/multi-word-component-names": [ "off" ],
 
 		"no-mixed-spaces-and-tabs": [ "off" ],
+
+		"@typescript-eslint/no-explicit-any": [ "warn" ]
 	}
 };

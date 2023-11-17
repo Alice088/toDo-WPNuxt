@@ -4,6 +4,15 @@ export default defineNuxtConfig({
 
 	ssr: false,
 
+	runtimeConfig: {
+
+		graphqlAPI: "bebebe",
+
+		public: {
+			RandomQuoteUrl: "https://api.quotable.io/quotes/random?maxLength=200&minLength=100",
+		}
+	},
+
 	build: {
 		analyze: {}
 	},
