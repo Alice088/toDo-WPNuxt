@@ -1,3 +1,5 @@
+// import { useFetchUserController } from "~/composables/useFetchUserController";
+
 type TypeUser = {
 	nickname: null | string
 	id: null | number
@@ -12,14 +14,22 @@ export const useUserAccountStore = defineStore("UserAccount", {
 	},
 	
 	actions: {
-		createUser() {
-			//some fetch
+		async createUser(nickname: string, password: string, email: string) {
+			return await $fetch("/api/createUser", {
+				method: "POST",
+
+				body: JSON.stringify({
+					nickname: nickname,
+					password: password,
+					email: email,
+				})
+			});
 		},
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		updateUser(id: number, nickname?: string, email?: string) {
-			//some fetch
-		},
+		// async updateUser(id: number, nickname?: string, email?: string) {
+		// 	const { data: result, error: message } = await useFetchUserController("/createUser");
+		// },
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		getUser(id: number) {

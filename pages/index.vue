@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { useThemeStore } from "@/stores/theme";
-import {createUser} from "~/server/model/AuthCRUD";
-
-const runtimeConfig = useRuntimeConfig();
+const config = useRuntimeConfig();
 const theme = useThemeStore();
+const user = useUserAccountStore();
+const errorQuote = {
+	quote: 	`
+	If we have a positive mental attitude,
+	then even when surrounded by hostility,
+  we shall not lack inner peace.
+  `,
 
-const { data: randomQuote, error: error } = await useFetch(runtimeConfig.public.RandomQuoteUrl);
+	author: "— Dalai Lama"
+};
 
-createUser({nickname: "gosha", email: "lololo@gmail.com", password: "q1212"}).then(console.log);
+let nickname = ref("");
+let password = ref("");
+let email = ref("");
+
+const { data: randomQuote, error: error } = await useFetch(config.public.RandomQuoteUrl);
 </script>
 
 <template>
@@ -47,9 +56,9 @@ createUser({nickname: "gosha", email: "lololo@gmail.com", password: "q1212"}).th
 				hidden"
 		>
 			<blockquote>
-				<q> {{ error ? "Error fetch" : randomQuote.at(0).content }} </q>
+				<q> {{ error ? errorQuote.quote : randomQuote.at(0).content }} </q>
 
-				<footer> {{ error ? "Error fetch" : "— "  + randomQuote.at(0).author }} </footer>
+				<footer> {{ error ? errorQuote.author : "— "  + randomQuote.at(0).author }} </footer>
 			</blockquote>
 		</div>
 
@@ -97,11 +106,11 @@ createUser({nickname: "gosha", email: "lololo@gmail.com", password: "q1212"}).th
 					      stroke="none" :fill="theme.theme === 'Dark' ? '#F0C9C4' : '#3B3738'" fill-rule="evenodd"/>
 				</svg>
 
-				<input type="text" autocomplete="off" placeholder="Nickname">
-				<input type="email" autocomplete="off" placeholder="Email">
-				<input type="password" autocomplete="off" placeholder="Password">
+				<input type="text" autocomplete="off" placeholder="Nickname" v-model="nickname">
+				<input type="email" autocomplete="off" placeholder="Email" v-model="email">
+				<input type="password" autocomplete="off" placeholder="Password" v-model="password">
 
-				<theButton> Send </theButton>
+				<theButton @click="user.createUser(nickname, password, email)"> Send </theButton>
 		</form>
 
 	</main>

@@ -1,12 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	devtools: { enabled: false },
+	devtools: { enabled: true },
 
 	ssr: false,
 
 	runtimeConfig: {
-
-		graphqlAPI: "bebebe",
+		secretAPI: process.env.SECRETAPI,
 
 		public: {
 			RandomQuoteUrl: "https://api.quotable.io/quotes/random?maxLength=200&minLength=100",
