@@ -1,5 +1,3 @@
-// import { useFetchUserController } from "~/composables/useFetchUserController";
-
 type TypeUser = {
 	nickname: null | string
 	id: null | number

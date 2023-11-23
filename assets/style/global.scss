@@ -7,11 +7,8 @@ html {
 	background-color: #F0C9C4;
 	color: #3B3738;
 
-	::selection {
-		background: #FFDAD8; /* Safari */
-	}
-	::-moz-selection {
-		background: #FFDAD8; /* Firefox */
+	::selection, ::-moz-selection {
+		background: rgba(255, 218, 216, 0.48);
 	}
 
 	transition: 300ms ease-in-out;

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<loading-spinner v-if="loading"/>
+		<TheLoadingSpinner v-if="loading"/>
 
 		<nuxtLayout v-show="!loading" >
 			<NuxtPage />

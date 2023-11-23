@@ -35,14 +35,17 @@ onMounted(() => {
 			class="fixed
 				w-full
 				flex
-				text-BabyPink
-				dark:text-BlackOlive
+				text-black
 				justify-between
+				items-center
+				rounded-bl-[15%]
+				rounded-br-[15%]
 				text-[20px]
 				p-3
-				bg-BlackOlive
-				dark:bg-BabyPink
+				bg-[url('@/assets/images/backgrounds/God2-Sistine_Chapel.png')]
 				transition
+				bg-center
+				bg-cover
 				duration-300
 				translate-y-[-100%]"
 		>
@@ -50,15 +53,24 @@ onMounted(() => {
 				TO-DO-WPNUXT
 			</strong>
 
-			<theButton @click="theme.theme === 'Dark' ? theme.setLightTheme() : theme.setDarkTheme()">
+			<theButton @click="theme.theme === 'Dark' ? theme.setLightTheme() : theme.setDarkTheme()"
+			           class="dark:bg-BlackOlive
+			            dark:text-BabyPink
+			            bg-BabyPink
+			            p-2
+			            h-fit
+			            rounded-[5px]
+			            transition
+									duration-300
+			            text-BlackOlive">
 				{{ theme.theme }}
 			</theButton>
 
 			<theButton
 				@click="isVisibleHeader ? hideHeader() : showHeader()"
 				class="absolute
-					top-[84px]
-					right-[12px]
+					top-[83px]
+					right-[250px]
 					bg-BlackOlive
 					dark:bg-BabyPink
 					p-1
