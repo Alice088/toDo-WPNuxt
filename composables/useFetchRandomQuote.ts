@@ -4,7 +4,7 @@ type quote = {
 };
 
 const useFetchRandomQuote = async () => {
-	const { data: data, error: error } = await useFetch("https://api.quotable.io/quotes/random?maxLength=200&minLength=100");
+	const { data, error } = await useFetch("https://api.quotable.io/quotes/random?maxLength=200&minLength=100");
 	const [quote] = data.value as quote[];
 
 
