@@ -38,8 +38,6 @@ onMounted(() => {
 				text-black
 				justify-between
 				items-center
-				rounded-bl-[15%]
-				rounded-br-[15%]
 				text-[20px]
 				p-3
 				bg-[url('@/assets/images/backgrounds/God2-Sistine_Chapel.png')]
@@ -70,7 +68,7 @@ onMounted(() => {
 				@click="isVisibleHeader ? hideHeader() : showHeader()"
 				class="absolute
 					top-[83px]
-					right-[250px]
+					right-[12px]
 					bg-BlackOlive
 					dark:bg-BabyPink
 					p-1

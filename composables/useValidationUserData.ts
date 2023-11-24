@@ -19,12 +19,11 @@ function isValidEmail(email: string, maxLength: number, minLength: number) {
 }
 
 
-function useValidationUserData (nickname: string, password: string, email: string) {
+function useValidationUserData (password: string, email: string) {
 	return {
-		nickname: isValidData(nickname, 20, 2, "nickname"),
 		password: isValidData(password, 20, 10, "password"),
 		email: isValidEmail(email, 50, 5),
 	};
 }
 
-export { useValidationUserData };
+export { isValidData, isValidEmail, useValidationUserData };
