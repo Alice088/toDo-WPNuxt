@@ -2,12 +2,17 @@
 const theme = useThemeStore();
 const isRegistration = ref(true);
 let show = ref(true);
+let delayShow = ref(true)
 
 const nickname = ref("");
 const password = ref("");
 const email = ref("");
 
 const randomQuote = await useFetchRandomQuote();
+
+watch(show, () => {
+	setTimeout(() => delayShow.value = show.value, 600)
+})
 
 function checkData() {
 	const result = useValidationUserData(password.value, email.value);
@@ -64,7 +69,7 @@ function checkData() {
 			</blockquote>
 		</article>
 
-		<transition name="fade" appear>
+		<transition name="fade">
 			<form v-if="show"
 						onsubmit="return false"
 						method="post"
@@ -176,8 +181,8 @@ function checkData() {
 			</form>
 		</transition>
 
-		<transition name="fade">
-			<div v-if="!show"
+		<transition name="fade" appear>
+			<div v-show="!delayShow"
 			     class="flex justify-center items-center flex-col gap-y-[20px]"
 			>
 				<p class="dark:text-BabyPink text-BlackOlive opacity-50"> what's your name? </p>
@@ -225,9 +230,9 @@ function checkData() {
 	</main>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .fade-enter-active, .fade-leave-active {
-	transition: opacity 0.5s;
+	transition: opacity 500ms ease-in-out;
 }
 .fade-enter, .fade-leave-to {
 	opacity: 0;
