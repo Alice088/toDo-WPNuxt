@@ -254,6 +254,8 @@ async function postDataUser() {
 										 class="dark:bg-BlackOlive
 													  dark:text-BabyPink
 													  p-2
+													  min-w-[47px]
+													  h-[40px]
 													  rounded-[5px]
 													  bg-BabyPink
 													  text-BlackOlive"
