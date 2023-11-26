@@ -150,7 +150,7 @@ async function postDataUser() {
 						<label>
 							10
 							—
-							{{ user.email?.length }}
+							{{ user.email?.length ?? 0 }}
 							—
 							50
 							—
@@ -173,7 +173,7 @@ async function postDataUser() {
 						<label>
 							10
 							—
-							{{ user.password?.length}}
+							{{ user.password?.length ?? 0 }}
 							—
 							20
 							—
