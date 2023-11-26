@@ -1,36 +1,64 @@
 <script setup lang="ts">
 const theme = useThemeStore();
 const isRegistration = ref(true);
-let show = ref(true);
-let delayShow = ref(true)
-
-const nickname = ref("");
-const password = ref("");
-const email = ref("");
-
+const user = useUserAccountStore();
+const showFirstStep = ref(true);
+const delayShowFirstStep = ref(true);
+const waitResServer = ref(false);
+const topNicknameLabel = ref("what's your name?");
 const randomQuote = await useFetchRandomQuote();
 
-watch(show, () => {
-	setTimeout(() => delayShow.value = show.value, 600)
-})
+watch(showFirstStep, () => {
+	setTimeout(() => delayShowFirstStep.value = showFirstStep.value, 600);
+});
 
 function checkData() {
-	const result = useValidationUserData(password.value, email.value);
+	const result = useValidationUserData(user.password, user.email);
 	let allisValid: boolean = true;
 
 	for(let boolean of Object.values(result)) if(!boolean.result) allisValid = false;
 
-	if(allisValid && isRegistration.value) show.value = false;
+	if(allisValid && isRegistration.value) showFirstStep.value = false;
+}
+
+async function postDataUser() {
+	waitResServer.value = true;
+
+	try {
+		const res = await user.createUser();
+
+		if(res.result) {
+			topNicknameLabel.value = res.message;
+			waitResServer.value = false;
+		}
+		else {
+			topNicknameLabel.value = res.message;
+			waitResServer.value = false;
+
+			setTimeout(() => { topNicknameLabel.value = "what's your name?"; }, 5000);
+		}
+
+	} catch (err) {
+		topNicknameLabel.value = "Something went wrong!";
+		waitResServer.value = false;
+
+		setTimeout(() => { topNicknameLabel.value = "what's your name?"; }, 5000);
+	}
 }
 </script>
 
 <template>
+	<transition>
+
+	</transition>
 	<main class="w-full
 							 h-[100svh]
 							 grid
 							 bg-BabyPink
 							 dark:bg-BlackOlive
 							 grid-cols-1
+							 [&_label]:dark:text-BabyPink/40
+							 [&_label]:text-BlackOlive/50
 							 transition
 							 duration-300
 							 laptop:grid-cols-2
@@ -69,12 +97,14 @@ function checkData() {
 			</blockquote>
 		</article>
 
-		<transition name="fade">
-			<form v-if="show"
+		<transition name="fadeAnimation">
+			<form v-show="showFirstStep"
 						onsubmit="return false"
+			      action=""
 						method="post"
 						class="grid
 									 p-3
+									 h-full
 									 [&_input]:bg-BlackOlive
 								   [&_input]:dark:bg-BabyPink
 								   [&_input]:text-BabyPink
@@ -91,8 +121,6 @@ function checkData() {
 									 transition
 									 dark:bg-BlackOlive
 									 outline-none
-									 [&_label]:dark:text-BabyPink/40
-									 [&_label]:text-BlackOlive/40
 									 duration-300
 									 bg-BabyPink"
 			>
@@ -114,7 +142,7 @@ function checkData() {
 						<TheInput type="email"
 						          autocomplete="off"
 						          placeholder="Email"
-						          v-model.trim="email"
+						          v-model.trim="user.email"
 						          maxlength="50"
 											class="focus:bg-GraniteGray
 								             focus:dark:bg-PalePink"
@@ -122,13 +150,13 @@ function checkData() {
 						<label>
 							10
 							—
-							{{ email.length }}
+							{{ user.email?.length }}
 							—
 							50
 							—
-							{{ isValidEmail(email, 50, 10).result }}
+							{{ isValidEmail(user.email, 50, 10).result }}
 							—
-							{{ `${isValidEmail(email, 50, 10).message}` }}
+							{{ `${isValidEmail(user.email, 50, 10).message}` }}
 						</label>
 					</div>
 
@@ -137,7 +165,7 @@ function checkData() {
 						<TheInput type="password"
 						          autocomplete="off"
 						          placeholder="Password"
-						          v-model="password"
+						          v-model="user.password"
 						          maxlength="20"
 						          class="focus:bg-GraniteGray
 								             focus:dark:bg-PalePink"
@@ -145,13 +173,13 @@ function checkData() {
 						<label>
 							10
 							—
-							{{ password.length}}
+							{{ user.password?.length}}
 							—
 							20
 							—
-							{{ isValidData(password, 20, 10, "password").result }}
+							{{ isValidData(user.password, 20, 10, "password").result }}
 							—
-							{{ `${isValidData(password, 20, 10, "password").message}` }}
+							{{ `${isValidData(user.password, 20, 10, "password").message}` }}
 						</label>
 					</div>
 
@@ -165,7 +193,7 @@ function checkData() {
 														bg-BlackOlive
 														dark:bg-BabyPink"
 					>
-						Send
+						Next step
 					</TheButton>
 
 					<TheButton @click="isRegistration = !isRegistration">
@@ -181,11 +209,11 @@ function checkData() {
 			</form>
 		</transition>
 
-		<transition name="fade" appear>
-			<div v-show="!delayShow"
+		<transition name="fadeAnimation" appear>
+			<div v-show="!delayShowFirstStep"
 			     class="flex justify-center items-center flex-col gap-y-[20px]"
 			>
-				<p class="dark:text-BabyPink text-BlackOlive opacity-50"> what's your name? </p>
+				<label for="nickname"> {{ topNicknameLabel }} </label>
 
 				<div class="min-w-[90%]
 										flex
@@ -207,8 +235,9 @@ function checkData() {
 
 					<theInput type="text"
 										placeholder="Nickname"
-					          v-model.trim="nickname"
+					          v-model.trim="user.nickname"
 					          autocomplete="off"
+						        id="nickname"
 					          maxlength="20"
 										class="dark:bg-BlackOlive
 													 placeholder:text-start
@@ -221,6 +250,18 @@ function checkData() {
 													 dark:text-BabyPink"
 					/>
 
+					<TheButton @click="postDataUser"
+										 class="dark:bg-BlackOlive
+													  dark:text-BabyPink
+													  p-2
+													  rounded-[5px]
+													  bg-BabyPink
+													  text-BlackOlive"
+					>
+						<p v-if="!waitResServer"> send </p>
+
+						<the-loading-spinner :size="20" :rounded="2" v-else />
+					</TheButton>
 				</div>
 
 				<h1 class="dark:text-BabyPink text-BlackOlive text-[20px] font-[600]"> It's your profile </h1>
@@ -231,10 +272,10 @@ function checkData() {
 </template>
 
 <style lang="scss" scoped>
-.fade-enter-active, .fade-leave-active {
+.fadeAnimation-enter-active, .fadeAnimation-leave-active {
 	transition: opacity 500ms ease-in-out;
 }
-.fade-enter, .fade-leave-to {
+.fadeAnimation-enter, .fadeAnimation-leave-to {
 	opacity: 0;
 }
 </style>

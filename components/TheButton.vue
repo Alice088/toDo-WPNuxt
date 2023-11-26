@@ -1,6 +1,7 @@
 <template>
-  <button class="enabled:active:scale-[.96]
+  <button class="enabled:active:scale-[.93]
 							   transition
+							   duration-300
 							   enabled:cursor-pointer
 							   select-none
 								 disabled:opacity-50

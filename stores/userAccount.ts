@@ -1,27 +1,39 @@
 type TypeUser = {
 	nickname: null | string
-	id: null | number
+	id: null | number,
+	password: null | string,
+	email: null | string,
 }
 
 export const useUserAccountStore = defineStore("UserAccount", {
 	state: () => {
 		return {
 			nickname: null,
-			id: null
+			id: null,
+			password: null,
+			email: null,
 		} as TypeUser;
 	},
 	
 	actions: {
-		async createUser(nickname: string, password: string, email: string) {
-			return await $fetch("/api/createUser", {
+		async createUser(): Promise<{ result: boolean, message: string }> {
+			const result: { message: string } = await $fetch("/api/createUser", {
 				method: "POST",
 
 				body: JSON.stringify({
-					nickname: nickname,
-					password: password,
-					email: email,
+					nickname: this.nickname,
+					password: this.password,
+					email: this.email,
 				})
 			});
+
+			if(result.message === "Something went wrong") return { result: false, message: result.message };
+			else {
+				this.password = null;
+				this.email = null;
+
+				return { result: true, message: result.message };
+			}
 		},
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars

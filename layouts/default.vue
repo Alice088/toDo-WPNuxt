@@ -58,8 +58,6 @@ onMounted(() => {
 			            p-2
 			            h-fit
 			            rounded-[5px]
-			            transition-[background]
-									duration-300
 			            text-BlackOlive">
 				{{ theme.theme }}
 			</theButton>

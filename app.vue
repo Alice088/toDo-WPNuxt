@@ -1,8 +1,11 @@
 <template>
 	<div>
-		<TheLoadingSpinner v-if="loading"/>
+		<TheLoadingSpinner v-if="loading"
+		                   class="fixed h-[100svh] top-0 left-0"
+		                   :size="100"
+											 :rounded="5"/>
 
-		<nuxtLayout v-show="!loading" >
+		<nuxtLayout>
 			<NuxtPage />
 		</nuxtLayout>
 	</div>
