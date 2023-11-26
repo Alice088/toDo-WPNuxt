@@ -7,12 +7,22 @@ export const useThemeStore = defineStore("theme", {
 
 	actions: {
 		setDarkTheme() {
-			document.documentElement.classList.add("dark");
+			const allElements = document.querySelectorAll("*");
+
+			for (let i = 0; i < allElements.length; i++) {
+				allElements[i].classList.add("dark");
+			}
+
 			this.theme = "Dark";
 		},
 
 		setLightTheme() {
-			document.documentElement.classList.remove("dark");
+			const allElements = document.querySelectorAll("*");
+
+			for (let i = 0; i < allElements.length; i++) {
+				allElements[i].classList.remove("dark");
+			}
+
 			this.theme = "Light";
 		},
 

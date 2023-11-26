@@ -1,18 +1,21 @@
 <script setup lang="ts">
 const theme = useThemeStore();
-const isRegistration = ref(true);
 const user = useUserAccountStore();
+const randomQuote = await useFetchRandomQuote();
+const router = useRouter();
+
+const isRegistration = ref(true);
 const showFirstStep = ref(true);
 const delayShowFirstStep = ref(true);
-const waitResServer = ref(false);
-const topNicknameLabel = ref("what's your name?");
-const randomQuote = await useFetchRandomQuote();
+const labelOfCreatingNickname = ref("what's your name?");
+const popUp = ref<HTMLDivElement | null>(null);
+let popUpShow = ref(false);
 
 watch(showFirstStep, () => {
 	setTimeout(() => delayShowFirstStep.value = showFirstStep.value, 600);
 });
 
-function checkData() {
+function checkRegistrationData() {
 	const result = useValidationUserData(user.password, user.email);
 	let allisValid: boolean = true;
 
@@ -21,28 +24,37 @@ function checkData() {
 	if(allisValid && isRegistration.value) showFirstStep.value = false;
 }
 
-async function postDataUser() {
-	waitResServer.value = true;
+async function checkAuthData() {
+	// const res = await user.authenticationUser();
+
+	// if (!res.result && popUp.value) {
+	// 	popUp.value.innerHTML = res.message;
+	popUpShow.value = !popUpShow.value;
+	// } else {
+	// 	await router.push({path: "/home"});
+	// }
+}
+
+async function createUser() {
+	user.fetchingServer = true;
 
 	try {
 		const res = await user.createUser();
 
 		if(res.result) {
-			topNicknameLabel.value = res.message;
-			waitResServer.value = false;
-		}
-		else {
-			topNicknameLabel.value = res.message;
-			waitResServer.value = false;
+			labelOfCreatingNickname.value = res.message;
+			user.fetchingServer = false;
+		} else {
+			labelOfCreatingNickname.value = res.message;
+			user.fetchingServer = false;
 
-			setTimeout(() => { topNicknameLabel.value = "what's your name?"; }, 5000);
+			setTimeout(() => router.push({ path: "/home" }), 5000);
 		}
-
 	} catch (err) {
-		topNicknameLabel.value = "Something went wrong!";
-		waitResServer.value = false;
+		labelOfCreatingNickname.value = "Something went wrong!";
+		user.fetchingServer = false;
 
-		setTimeout(() => { topNicknameLabel.value = "what's your name?"; }, 5000);
+		setTimeout(() => { labelOfCreatingNickname.value = "what's your name?"; }, 5000);
 	}
 }
 </script>
@@ -154,9 +166,23 @@ async function postDataUser() {
 							—
 							50
 							—
-							{{ isValidEmail(user.email, 50, 10).result }}
+							<span :class="[
+							 isValidEmail(user.email, 50, 10).result
+							 ? 'text-green-600'
+							 : 'text-red-500'
+							 ]"
+							>
+								{{ isValidEmail(user.email, 50, 10).result }}
+							</span>
 							—
-							{{ `${isValidEmail(user.email, 50, 10).message}` }}
+							<span :class="[
+							 isValidEmail(user.email, 50, 10).result
+							 ? 'text-green-600'
+							 : 'text-red-500'
+							 ]"
+							>
+								{{ `${isValidEmail(user.email, 50, 10).message}` }}
+							</span>
 						</label>
 					</div>
 
@@ -177,14 +203,27 @@ async function postDataUser() {
 							—
 							20
 							—
-							{{ isValidData(user.password, 20, 10, "password").result }}
+							<span :class="[
+							 isValidData(user.password, 20, 10, 'password').result
+							 ? 'text-green-600'
+							 : 'text-red-500'
+							 ]"
+							>
+								{{ isValidData(user.password, 20, 10, "password").result }}
+							</span>
 							—
-							{{ `${isValidData(user.password, 20, 10, "password").message}` }}
+							<span :class="[
+							 isValidData(user.password, 20, 10, 'password').result
+							 ? 'text-green-600'
+							 : 'text-red-500'
+							 ]"
+							>
+								{{ `${isValidData(user.password, 20, 10, "password").message}` }}
+							</span>
 						</label>
 					</div>
 
-					<TheButton @click="checkData"
-						         ref="sendButton"
+					<TheButton @click="isRegistration ? checkRegistrationData() : checkAuthData()"
 					           class="w-full
 														h-[50px]
 														text-BabyPink
@@ -193,7 +232,7 @@ async function postDataUser() {
 														bg-BlackOlive
 														dark:bg-BabyPink"
 					>
-						Next step
+						{{ isRegistration ? "Next step" : "send" }}
 					</TheButton>
 
 					<TheButton @click="isRegistration = !isRegistration">
@@ -213,7 +252,7 @@ async function postDataUser() {
 			<div v-show="!delayShowFirstStep"
 			     class="flex justify-center items-center flex-col gap-y-[20px]"
 			>
-				<label for="nickname"> {{ topNicknameLabel }} </label>
+				<label for="nickname"> {{ labelOfCreatingNickname }} </label>
 
 				<div class="min-w-[90%]
 										flex
@@ -250,7 +289,7 @@ async function postDataUser() {
 													 dark:text-BabyPink"
 					/>
 
-					<TheButton @click="postDataUser"
+					<TheButton @click="createUser"
 										 class="dark:bg-BlackOlive
 													  dark:text-BabyPink
 													  p-2
@@ -260,7 +299,7 @@ async function postDataUser() {
 													  bg-BabyPink
 													  text-BlackOlive"
 					>
-						<p v-if="!waitResServer"> send </p>
+						<p v-if="!user.fetchingServer"> send </p>
 
 						<the-loading-spinner :size="20" :rounded="2" v-else />
 					</TheButton>
@@ -270,6 +309,10 @@ async function postDataUser() {
 				<p class="dark:text-BabyPink text-BlackOlive"> it'll store your nickname and your ToDo. </p>
 			</div>
 		</transition>
+
+		<ThePopUp ref="popUp" :show="popUpShow">
+			password
+		</ThePopUp>
 	</main>
 </template>
 
