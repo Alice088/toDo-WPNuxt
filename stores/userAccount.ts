@@ -1,13 +1,11 @@
 type TypeUser = {
 	nickname: null | string
 	id: null | number,
-	password: null | string,
-	email: null | string,
 	auth: boolean,
 	fetchingServer: boolean,
 }
 
-type responseServer = {
+export type responseServer = {
 	message: string,
 	result: boolean
 }
@@ -15,40 +13,34 @@ type responseServer = {
 export const useUserAccountStore = defineStore("UserAccount", {
 	state: () => {
 		return {
-			nickname: null,
 			id: null,
-			password: null,
-			email: null,
 			auth: false,
 			fetchingServer: false
 		} as TypeUser;
 	},
 	
 	actions: {
-		async createUser(): Promise<responseServer> {
+		async createUser(nickname: string, password: string, email: string): Promise<responseServer> {
 			const res: responseServer = await $fetch("/api/createUser", {
 				method: "POST",
 
 				body: JSON.stringify({
-					nickname: this.nickname,
-					password: this.password,
-					email: this.email,
+					nickname: nickname,
+					password: password,
+					email: email,
 				})
 			});
 
 			if (!res.result) return res;
 			else {
-				this.password = null;
-				this.email = null;
 				this.auth = true;
-
 				return res;
 			}
 		},
 
-		async authenticationUser(): Promise<responseServer> {
+		async authenticationUser(nickname: string, password: string): Promise<responseServer> {
 			const res: responseServer = await $fetch(
-				`/api/createUser/${this.nickname}/${this.password}`,
+				`/api/createUser/${nickname}/${password}`,
 				{
 					method: "GET",
 				});
