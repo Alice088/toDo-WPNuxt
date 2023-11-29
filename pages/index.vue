@@ -30,6 +30,8 @@ async function sendDataToServer() {
 
 	userAccount.fetchingServer = false;
 }
+
+onMounted(theme.detectAndSetTheme);
 </script>
 
 <template>
@@ -90,7 +92,11 @@ async function sendDataToServer() {
 				</TheButton>
 			</div>
 
-			<p class="form__description"> Registration </p>
+			<div class="form__description">
+				<p> Registration </p>
+
+				<TheButton @click="router.push({path: '/authentication'});"> Already have an account? </TheButton>
+			</div>
 		</form>
 	</main>
 </template>
@@ -187,6 +193,11 @@ async function sendDataToServer() {
 	}
 
 	.form__description {
+		display: flex;
+		justify-content: space-around;
+
+		width: 100%;
+
 		color: $blackOlive;
 
 		&.dark {

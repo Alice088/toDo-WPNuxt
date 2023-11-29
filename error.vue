@@ -34,7 +34,7 @@ onMounted(detectAndSetTheme);
       <p> ERROR! </p>
     </div>
 
-    <TheButton class="dark:text-BabyPink text-BlackOlive">
+    <TheButton @click="$router.back()" class="dark:text-BabyPink text-BlackOlive">
 	    Go to Back
     </TheButton>
   </main>
