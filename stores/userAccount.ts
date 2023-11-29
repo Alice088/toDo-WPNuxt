@@ -38,9 +38,9 @@ export const useUserAccountStore = defineStore("UserAccount", {
 			}
 		},
 
-		async authenticationUser(nickname: string, password: string): Promise<responseServer> {
+		async authenticationUser(nickname: string, password: string) {
 			const res: responseServer = await $fetch(
-				`/api/createUser/${nickname}/${password}`,
+				`/api/authenticationUser?nickname=${nickname}&password=${password}`,
 				{
 					method: "GET",
 				});

@@ -4,43 +4,41 @@ const randomQuote = await useFetchRandomQuote();
 const userAccount = useUserAccountStore();
 const router = useRouter();
 
-let sendButtonText = ref("send");
+const sendButtonText = ref("send");
+const disabledFormButton = ref(false);
 
 const password = ref("");
-const email = ref("");
 const nickname = ref("");
 
 async function sendDataToServer() {
-	userAccount.fetchingServer = true;
-
-	const isValid = useValidationUserData(nickname.value, password.value, email.value);
+	const isValidPassword = isValidData(password.value, 20, 10, "password").result;
+	const isValidNickname = isValidData(password.value, 20, 10, "nickname").result;
 	
-	if(isValid) {
-		await userAccount.createUser(nickname.value, password.value, email.value)
+	if(isValidPassword && isValidNickname) {
+		userAccount.fetchingServer = true;
+
+		await userAccount.authenticationUser(nickname.value, password.value)
 			.then(() => {
 				userAccount.fetchingServer = false;
 				router.push({path: "/home"});
 			})
 			.catch(err  => {
 				userAccount.fetchingServer = false;
-				sendButtonText.value = err.message;
-				setTimeout(() => sendButtonText.value = "send", 5000);
-			});
-	}
+				disabledFormButton.value = true;
+				
+				sendButtonText.value = `${err.data.data.message}: ${err.status},`;
 
-	userAccount.fetchingServer = false;
+				setTimeout(() => sendButtonText.value = "send", 5000);
+				setTimeout(() => disabledFormButton.value = false, 5000);
+			});
+		
+		userAccount.fetchingServer = false;
+	}
 }
 </script>
 
 <template>
 	<main class="registration">
-		<section class="quotesBox">
-			<blockquote class="quotesBox__quote">
-				<q>{{ randomQuote.content }}</q>
-				<footer>{{ randomQuote.author }}</footer>
-			</blockquote>
-		</section>
-
 		<form class="form" onclick="return false">
 			<svg xmlns="http://www.w3.org/2000/svg" width="250" height="150" viewBox="0 0 2000 1000">
 				<path d="" stroke="#FFDAD8" fill="#080404"/>
@@ -49,40 +47,22 @@ async function sendDataToServer() {
 			</svg>
 
 			<div class="form__inputBox">
-				<div class="form__input">
-					<label> {{ isValidData(nickname, 20, 10, "nickname").message }} </label>
+				<theInput class="form__input"
+				          type="text"
+				          placeholder="nickname"
+				          :model-value="nickname"
+				          maxLength="20"
+				          @update:model-value="newValue => nickname = newValue" />
 
-					<theInput placeholder="nickname"
-					          type="text"
-					          :model-value="nickname"
-					          maxLength="20"
-					          @update:model-value="newValue => nickname = newValue" />
-				</div>
+				<theInput class="form__input"
+				          placeholder="password"
+				          type="password"
+				          v-model="password"
+				          maxLength="20"
+				          @update:model-value="newValue => password = newValue"/>
 
-				<div class="form__input">
-					<label> {{ isValidEmail(email, 50, 5).message }} </label>
-
-					<theInput placeholder="e-mail"
-					          type="email"
-					          :model-value="email"
-					          maxLength="50"
-					          @update:model-value="newValue => email = newValue" />
-				</div>
-
-				<div class="form__input">
-					<label> {{ isValidData(password, 20, 10, "password").message }} </label>
-
-					<theInput placeholder="password"
-					          v-model="password"
-					          type="password"
-					          maxLength="20"
-					          @update:model-value="newValue => password = newValue"/>
-				</div>
-
-				<TheButton class="form__button">
-					<p ref="buttonText"
-					   @click="sendDataToServer"
-					   v-if="!userAccount.fetchingServer">
+				<TheButton class="form__button" :disabled="disabledFormButton">
+					<p @click="disabledFormButton ? null : sendDataToServer()" v-if="!userAccount.fetchingServer">
 						{{ sendButtonText }}
 					</p>
 
@@ -90,8 +70,15 @@ async function sendDataToServer() {
 				</TheButton>
 			</div>
 
-			<p class="form__description"> Registration </p>
+			<p class="form__description"> Authentication </p>
 		</form>
+
+		<section class="quotesBox">
+			<blockquote class="quotesBox__quote">
+				<q>{{ randomQuote.content }}</q>
+				<footer>{{ randomQuote.author }}</footer>
+			</blockquote>
+		</section>
 	</main>
 </template>
 
@@ -115,7 +102,7 @@ async function sendDataToServer() {
 }
 
 .quotesBox {
-	background-image: url("@/assets/images/backgrounds/WomanWithPearlEarring.webp");
+	background-image: url("@/assets/images/backgrounds/DostoevskyPortret.jpg");
 	background-size: cover;
 	background-position: center;
 
@@ -161,14 +148,10 @@ async function sendDataToServer() {
 	}
 
 	.form__input {
-		label {
-			color: $blackOlive;
-		}
+		color: $babyPink;
 
 		&.dark {
-			label {
-				color: $babyPink;
-			}
+			color: $blackOlive;
 		}
 	}
 
@@ -197,7 +180,7 @@ async function sendDataToServer() {
 
 @media screen and (min-width: $table) {
 	.registration {
-		grid-template-columns: 40% 1fr;
+		grid-template-columns: 1fr 40%;
 	}
 
 	.quotesBox {
