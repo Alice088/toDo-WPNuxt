@@ -1,4 +1,4 @@
-type TypeUser = {
+type TypeStore = {
 	nickname: null | string
 	id: null | number,
 	auth: boolean,
@@ -7,16 +7,18 @@ type TypeUser = {
 
 export type responseServer = {
 	message: string,
-	result: boolean
+	result: boolean,
+	id: number,
 }
 
 export const useUserAccountStore = defineStore("UserAccount", {
 	state: () => {
 		return {
+			nickname: null,
 			id: null,
 			auth: false,
 			fetchingServer: false
-		} as TypeUser;
+		} as TypeStore;
 	},
 	
 	actions: {
@@ -33,7 +35,12 @@ export const useUserAccountStore = defineStore("UserAccount", {
 
 			if (!res.result) return res;
 			else {
+				const { id } = await this.getUserID(nickname, email);
+
 				this.auth = true;
+				this.nickname = nickname;
+				this.id = id;
+
 				return res;
 			}
 		},
@@ -41,29 +48,24 @@ export const useUserAccountStore = defineStore("UserAccount", {
 		async authenticationUser(nickname: string, password: string) {
 			const res: responseServer = await $fetch(
 				`/api/authenticationUser?nickname=${nickname}&password=${password}`,
-				{ method: "GET" });
+				{ method: "GET" }
+			);
 			
 			if(!res.result) return res;
 			else {
+				this.id = res.id;
+				this.nickname =  nickname;
 				this.auth = true;
 
 				return res;
 			}
 		},
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		// async updateUser(id: number, nickname?: string, email?: string) {
-		// 	const { data: result, error: message } = await useFetchUserController("/createUser");
-		// },
-
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		getUser(id: number) {
-			//some fetch
+		async getUserID(nickname: string, email: string): Promise<responseServer> {
+			return await $fetch(
+				`/api/getUserID?nickname=${nickname}&email=${email}`,
+				{ method: "GET" }
+			) as responseServer;
 		},
-
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		deleteUser(id: number) {
-			//some fetch
-		}
 	}
 });

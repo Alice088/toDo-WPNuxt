@@ -16,6 +16,7 @@ async function sendDataToServer() {
 	
 	if(isValidPassword && isValidNickname) {
 		userAccount.fetchingServer = true;
+		disabledFormButton.value = true;
 
 		await userAccount.authenticationUser(nickname.value, password.value)
 			.then(() => {
@@ -24,14 +25,13 @@ async function sendDataToServer() {
 			})
 			.catch(err  => {
 				userAccount.fetchingServer = false;
-				disabledFormButton.value = true;
 				
-				sendButtonText.value = `${err.data.data.message}: ${err.status},`;
+				sendButtonText.value = `${err.data.data.message ?? "Something went wrong!"}: ${err.status},`;
 
 				setTimeout(() => sendButtonText.value = "send", 5000);
-				setTimeout(() => disabledFormButton.value = false, 5000);
 			});
-		
+
+		setTimeout(() => disabledFormButton.value = false, 5000);
 		userAccount.fetchingServer = false;
 	}
 }

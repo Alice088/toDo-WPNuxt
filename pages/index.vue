@@ -5,6 +5,7 @@ const userAccount = useUserAccountStore();
 const router = useRouter();
 
 let sendButtonText = ref("send");
+const disabledFormButton = ref(false);
 
 const password = ref("");
 const email = ref("");
@@ -12,6 +13,7 @@ const nickname = ref("");
 
 async function sendDataToServer() {
 	userAccount.fetchingServer = true;
+	disabledFormButton.value = true;
 
 	const isValid = useValidationUserData(nickname.value, password.value, email.value);
 	
@@ -23,11 +25,14 @@ async function sendDataToServer() {
 			})
 			.catch(err  => {
 				userAccount.fetchingServer = false;
-				sendButtonText.value = err.message;
+
+				sendButtonText.value = `${err.data.data.message ?? "Something went wrong!"}: ${err.status},`;
+
 				setTimeout(() => sendButtonText.value = "send", 5000);
 			});
 	}
 
+	setTimeout(() => disabledFormButton.value = false, 5000);
 	userAccount.fetchingServer = false;
 }
 
@@ -81,9 +86,9 @@ onMounted(theme.detectAndSetTheme);
 					          @update:model-value="newValue => password = newValue"/>
 				</div>
 
-				<TheButton class="form__button">
+				<TheButton class="form__button" :disabled="disabledFormButton">
 					<p ref="buttonText"
-					   @click="sendDataToServer"
+					   @click="disabledFormButton ? null : sendDataToServer()"
 					   v-if="!userAccount.fetchingServer">
 						{{ sendButtonText }}
 					</p>
