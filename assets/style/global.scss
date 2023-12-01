@@ -3,29 +3,29 @@
 @tailwind utilities;
 @import "colors";
 
+
 $desktop: 1400px;
 $laptop: 1000px;
 $table: 800px;
 $mobile: 360px;
 
+
 html {
 	font-family: 'Forum', serif;
-	background-color: #F0C9C4;
+	background-color: black;
 	color: #3B3738;
 
 	::selection, ::-moz-selection {
 		background: rgba(255, 218, 216, 0.48);
 	}
-
-	transition: 300ms ease-in-out;
-	transition-property: background-color, color;
 }
 
-.page-enter-active,
-.page-leave-active {
-	transition: all 700ms ease-in-out;
+
+.fadeTransition-enter-active,
+.fadeTransition-leave-active {
+	transition: all 400ms ease-in-out;
 }
-.page-enter-from,
-.page-leave-to {
+.fadeTransition-enter-from,
+.fadeTransition-leave-to {
 	opacity: 0;
 }

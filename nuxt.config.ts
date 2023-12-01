@@ -17,6 +17,13 @@ export default defineNuxtConfig({
 	},
 
 	app: {
+		pageTransition: {
+			name: "fadeTransition",
+			mode: "out-in",
+			appear: true,
+			type: "transition"
+		},
+
 		head: {
 			htmlAttrs: { lang: "en-US" },
 			title: "Gosha To Do",
@@ -24,14 +31,12 @@ export default defineNuxtConfig({
 				{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }
 			]
 		},
-
-		pageTransition: { name: "page", mode: "out-in", appear: true, },
 	},
 
 	css: [
-		"@/assets/style/fonts.scss",
+		"@/assets/style/fonts.css",
 		"@/assets/style/global.scss",
-		"@/assets/style/reset.scss",
+		"@/assets/style/reset.css",
 		"@/assets/style/colors.scss",
 	],
 

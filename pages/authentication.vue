@@ -75,7 +75,7 @@ onMounted(theme.detectAndSetTheme);
 			<div class="form__description">
 				<p> Authentication </p>
 
-				<TheButton @click="router.push({path: '/'});"> Don't have account? </TheButton>
+				<NuxtLink to="/"> Don't have account? </NuxtLink>
 			</div>
 		</form>
 

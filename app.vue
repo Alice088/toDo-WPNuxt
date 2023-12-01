@@ -12,13 +12,9 @@ onMounted(() => {
 </script>
 
 <template>
-	<TheLoadingSpinner v-if="loading"
-	                   class="fixed h-[100svh] top-0 left-0"
-	                   :size="100"
-										 :rounded="5"/>
-
-	<nuxtLayout>
+	<div>
+		<TheHeader />
+		<TheLoadingSpinner v-if="loading" class="fixed h-[100svh] top-0 left-0" :size="100" :rounded="5" />
 		<NuxtPage />
-	</nuxtLayout>
+	</div>
 </template>
-

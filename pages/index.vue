@@ -100,13 +100,13 @@ onMounted(theme.detectAndSetTheme);
 			<div class="form__description">
 				<p> Registration </p>
 
-				<TheButton @click="router.push({path: '/authentication'});"> Already have an account? </TheButton>
+				<NuxtLink to="/authentication"> Already have an account?  </NuxtLink>
 			</div>
 		</form>
 	</main>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import "assets/style/global";
 
 * {
