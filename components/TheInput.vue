@@ -8,7 +8,7 @@ defineEmits(["update:modelValue"]);
 
 <template>
  <input :value="props.modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input.stop="$emit('update:modelValue', $event.target.value)"
 	      class="input"
  />
 </template>

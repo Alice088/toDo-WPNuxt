@@ -3,7 +3,7 @@ const themeStore = useThemeStore();
 
 const header = ref<HTMLElement | null>(null);
 const isVisibleHeader = ref(false);
-const headerText = ref("TODO");
+const headerText = ref(window.innerWidth <= 410 ? "TODO" : "TO-DO-WPNUXT");
 let resetTime: NodeJS.Timeout | null = null;
 
 const headerAdaptation = () => headerText.value = window.innerWidth <= 410 ? "TODO" : "TO-DO-WPNUXT";
@@ -99,7 +99,6 @@ onMounted(() => {
 	height: fit-content;
 	width: fit-content;
 	border-radius: 5px;
-
 	align-self: center;
 
 	&.dark {

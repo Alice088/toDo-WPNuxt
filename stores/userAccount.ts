@@ -2,10 +2,11 @@ type TypeStore = {
 	nickname: null | string
 	id: null | number,
 	auth: boolean,
+	toDo: Map<number, toDo> | null,
 	fetchingServer: boolean,
 }
 
-export type responseServer = {
+type responseServer = {
 	message: string,
 	result: boolean,
 	id: number,
@@ -16,7 +17,8 @@ export const useUserAccountStore = defineStore("UserAccount", {
 		return {
 			nickname: null,
 			id: null,
-			auth: false,
+			auth: true,
+			toDo: null,
 			fetchingServer: false
 		} as TypeStore;
 	},
